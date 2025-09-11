@@ -1,103 +1,136 @@
-import Image from "next/image";
+'use client';
+
+import { useItems } from '@/hooks/use-items';
+import Link from 'next/link';
+import { useCart } from '@/lib/cart-context';
 
 export default function Home() {
+  const { 
+    items, 
+    isLoading, 
+    error, 
+    filters, 
+    setCategory, 
+    setMinPrice, 
+    setMaxPrice 
+  } = useItems();
+  
+  const { addToCart } = useCart();
+  
+  // Available categories (would normally come from API)
+  const categories = ['Electronics', 'Clothing', 'Books', 'Home'];
+  
+  const handleAddToCart = (itemId: string) => {
+    addToCart(itemId, 1);
+  };
+  
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+    <div className="max-w-6xl mx-auto">
+      <h1 className="text-3xl font-bold mb-8">Shop Products</h1>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        {/* Filters sidebar */}
+        <div className="lg:col-span-1 p-4 bg-gray-50 rounded-lg">
+          <h2 className="text-xl font-semibold mb-4">Filters</h2>
+          
+          <div className="mb-4">
+            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+              Category
+            </label>
+            <select 
+              id="category"
+              className="w-full p-2 border rounded-md"
+              value={filters.category}
+              onChange={(e) => setCategory(e.target.value)}
+              title="Filter by category"
+            >
+              <option value="">All Categories</option>
+              {categories.map(category => (
+                <option key={category} value={category}>{category}</option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="mb-4">
+            <label htmlFor="minPrice" className="block text-sm font-medium text-gray-700 mb-1">
+              Min Price
+            </label>
+            <input
+              id="minPrice"
+              type="number"
+              min="0"
+              step="1"
+              className="w-full p-2 border rounded-md"
+              value={filters.minPrice}
+              onChange={(e) => setMinPrice(Number(e.target.value))}
+              placeholder="Minimum price"
+              title="Set minimum price"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          </div>
+          
+          <div className="mb-4">
+            <label htmlFor="maxPrice" className="block text-sm font-medium text-gray-700 mb-1">
+              Max Price
+            </label>
+            <input
+              id="maxPrice"
+              type="number"
+              min="0"
+              step="1"
+              className="w-full p-2 border rounded-md"
+              value={filters.maxPrice === Infinity ? "" : filters.maxPrice}
+              onChange={(e) => {
+                const value = e.target.value ? Number(e.target.value) : Infinity;
+                setMaxPrice(value);
+              }}
+              placeholder="Maximum price"
+              title="Set maximum price"
+            />
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        
+        {/* Product listing */}
+        <div className="lg:col-span-3">
+          {isLoading ? (
+            <div className="text-center py-8">Loading products...</div>
+          ) : error ? (
+            <div className="text-center py-8 text-red-500">{error}</div>
+          ) : items.length === 0 ? (
+            <div className="text-center py-8">No products found matching your criteria.</div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {items.map((item) => (
+                <div key={item.id} className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                  <div className="h-48 bg-gray-200 flex items-center justify-center overflow-hidden">
+                    {item.image ? (
+                      <img 
+                        src={item.image} 
+                        alt={item.name} 
+                        className="w-full h-full object-cover" 
+                      />
+                    ) : (
+                      <span className="text-gray-400">No image</span>
+                    )}
+                  </div>
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold mb-1">{item.name}</h3>
+                    <p className="text-gray-500 text-sm mb-1">{item.category}</p>
+                    <p className="text-xl font-bold mb-3">${item.price.toFixed(2)}</p>
+                    <div className="flex space-x-2">
+                      <button 
+                        onClick={() => handleAddToCart(item.id)}
+                        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors flex-1"
+                      >
+                        Add to Cart
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
