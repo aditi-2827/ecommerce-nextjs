@@ -1,10 +1,17 @@
-import { NextRequest, NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import { carts } from '@/lib/db';
 import { verifyJwt } from '@/utils/jwt';
 
+type RouteHandlerContext = {
+  params: {
+    itemId: string;
+  };
+};
+
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { itemId: string } }
+  context: RouteHandlerContext
 ): Promise<NextResponse> {
   try {
     // Verify authentication
