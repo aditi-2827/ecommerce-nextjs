@@ -3,15 +3,15 @@ import { NextResponse } from 'next/server';
 import { carts } from '@/lib/db';
 import { verifyJwt } from '@/utils/jwt';
 
-type RouteHandlerContext = {
+interface RouteContext {
   params: {
     itemId: string;
   };
-};
+}
 
 export async function DELETE(
   request: NextRequest,
-  context: RouteHandlerContext
+  { params }: RouteContext
 ): Promise<NextResponse> {
   try {
     // Verify authentication
