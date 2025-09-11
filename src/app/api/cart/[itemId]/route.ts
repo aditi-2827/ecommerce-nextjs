@@ -1,14 +1,11 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { carts } from '@/lib/db';
 import { verifyJwt } from '@/utils/jwt';
 
-type Props = {
-  params: {
-    itemId: string;
-  };
-};
-
-export async function DELETE(request: Request, { params }: Props) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { itemId: string } }
+): Promise<NextResponse> {
   try {
     // Verify authentication
     const token = request.headers.get('authorization')?.split(' ')[1];
