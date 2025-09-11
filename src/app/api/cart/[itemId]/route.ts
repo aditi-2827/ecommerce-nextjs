@@ -1,12 +1,14 @@
-import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { carts } from '@/lib/db';
 import { verifyJwt } from '@/utils/jwt';
 
-export async function DELETE(
-  request: NextRequest,
-  context: { params: { itemId: string } }
-) {
+type Props = {
+  params: {
+    itemId: string;
+  };
+};
+
+export async function DELETE(request: Request, { params }: Props) {
   try {
     // Verify authentication
     const token = request.headers.get('authorization')?.split(' ')[1];
@@ -23,7 +25,7 @@ export async function DELETE(
     }
 
     const userId = payload.userId;
-    const itemId = context.params.itemId;
+    const itemId = params.itemId;
 
     if (!carts[userId]) {
       return NextResponse.json({ error: 'Cart not found' }, { status: 404 });
