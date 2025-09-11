@@ -37,6 +37,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     if (user && token) {
       syncWithServer();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, token]);
 
   // Save cart to localStorage whenever it changes
@@ -48,7 +49,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     // Optimistically update UI
     setState(prev => {
       const existingItemIndex = prev.items.findIndex(item => item.itemId === itemId);
-      let newItems = [...prev.items];
+      const newItems = [...prev.items];
       
       if (existingItemIndex !== -1) {
         newItems[existingItemIndex] = { ...newItems[existingItemIndex], quantity };

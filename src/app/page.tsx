@@ -1,7 +1,6 @@
 'use client';
 
 import { useItems } from '@/hooks/use-items';
-import Link from 'next/link';
 import { useCart } from '@/lib/cart-context';
 
 export default function Home() {

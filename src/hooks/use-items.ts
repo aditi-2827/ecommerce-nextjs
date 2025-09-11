@@ -68,6 +68,7 @@ export const useItems = ({
   // Fetch items when filters change
   useEffect(() => {
     fetchItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category, minPrice, maxPrice]);
   
   return {
