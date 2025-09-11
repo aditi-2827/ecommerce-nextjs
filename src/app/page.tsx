@@ -24,8 +24,28 @@ export default function Home() {
   };
   
   return (
-    <div className="max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">Shop Products</h1>
+    <div className="max-w-6xl mx-auto px-4">
+      {/* Hero Section */}
+      <div className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl overflow-hidden mb-12 shadow-lg">
+        <div className="flex flex-col md:flex-row items-center">
+          <div className="p-8 md:p-12 md:w-1/2">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Discover Amazing Products</h1>
+            <p className="text-blue-100 text-lg mb-6">Shop the latest trends with free shipping on all orders over $50.</p>
+            <button className="bg-white hover:bg-gray-100 text-blue-600 px-8 py-3 rounded-lg font-semibold transition-colors">
+              Shop Now
+            </button>
+          </div>
+          <div className="md:w-1/2 p-4">
+            <img 
+              src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+              alt="Featured Products" 
+              className="w-full h-64 object-cover rounded-lg shadow-md"
+            />
+          </div>
+        </div>
+      </div>
+
+      <h2 className="text-3xl font-bold mb-8">Shop Products</h2>
       
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Filters sidebar */}
