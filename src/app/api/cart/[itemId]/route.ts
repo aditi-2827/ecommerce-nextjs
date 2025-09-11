@@ -7,40 +7,44 @@ export async function DELETE(
   { params }: { params: { itemId: string } }
 ): Promise<NextResponse> {
   try {
-    // Verify authentication
-    const token = request.headers.get('authorization')?.split(' ')[1];
+    const token = request.cookies.get('token')?.value;
+    
     if (!token) {
       return NextResponse.json(
-        { error: 'Authentication required' },
+        { error: 'Authentication required' }, 
         { status: 401 }
       );
     }
 
-    const payload = verifyJwt(token) as { userId: string } | null;
-    if (!payload) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+    const payload = verifyJwt(token);
+    
+    if (!payload || !payload.userId) {
+      return NextResponse.json(
+        { error: 'Invalid token' },
+        { status: 401 }
+      );
     }
 
     const userId = payload.userId;
-    const itemId = params.itemId;
 
-    if (!carts[userId]) {
-      return NextResponse.json({ error: 'Cart not found' }, { status: 404 });
-    }
+    // Get current cart for user
+    const userCart = carts[userId] || [];
+    
+    // Filter out the item with the specified itemId
+    const updatedCart = userCart.filter(item => item.itemId !== params.itemId);
+    
+    // Update the cart in our "database"
+    carts[userId] = updatedCart;
 
-    const itemIndex = carts[userId].findIndex(item => item.itemId === itemId);
-    if (itemIndex === -1) {
-      return NextResponse.json({ error: 'Item not in cart' }, { status: 404 });
-    }
-
-    // Remove the item from the cart
-    carts[userId].splice(itemIndex, 1);
-
-    return NextResponse.json({ cart: carts[userId] });
+    return NextResponse.json({ 
+      message: 'Item removed from cart', 
+      cartItems: updatedCart 
+    });
+    
   } catch (error) {
-    console.error(`Error removing item from cart:`, error);
+    console.error('Error removing item from cart:', error);
     return NextResponse.json(
-      { error: 'Internal Server Error' },
+      { error: 'Internal Server Error' }, 
       { status: 500 }
     );
   }
