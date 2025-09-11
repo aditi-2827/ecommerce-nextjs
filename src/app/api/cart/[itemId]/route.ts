@@ -4,7 +4,7 @@ import { verifyJwt } from '@/utils/jwt';
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { itemId: string } }
+  context: { params: { itemId: string } }
 ) {
   try {
     // Verify authentication
@@ -22,7 +22,7 @@ export async function DELETE(
     }
 
     const userId = payload.userId;
-    const itemId = params.itemId;
+    const itemId = context.params.itemId;
 
     if (!carts[userId]) {
       return NextResponse.json({ error: 'Cart not found' }, { status: 404 });
