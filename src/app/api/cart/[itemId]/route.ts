@@ -3,16 +3,10 @@ import { NextResponse } from 'next/server';
 import { carts } from '@/lib/db';
 import { verifyJwt } from '@/utils/jwt';
 
-interface RouteContext {
-  params: {
-    itemId: string;
-  };
-}
-
 export async function DELETE(
   request: NextRequest,
-  { params }: RouteContext
-): Promise<NextResponse> {
+  context: { params: { itemId: string } }
+) {
   try {
     // Verify authentication
     const token = request.headers.get('authorization')?.split(' ')[1];
@@ -29,7 +23,7 @@ export async function DELETE(
     }
 
     const userId = payload.userId;
-    const itemId = params.itemId;
+    const itemId = context.params.itemId;
 
     if (!carts[userId]) {
       return NextResponse.json({ error: 'Cart not found' }, { status: 404 });
