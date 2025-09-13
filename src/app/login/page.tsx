@@ -1,85 +1,36 @@
-'use client';
-
-import { useState, FormEvent } from 'react';
-import { useAuth } from '@/lib/auth-context';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const { login, error } = useAuth();
-  const router = useRouter();
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    
-    const success = await login(email, password);
-    setIsLoading(false);
-    
-    if (success) {
-      router.push('/');
-    }
-  };
-
   return (
-    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
-      
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-md text-sm">
-            {error}
-          </div>
-        )}
-        
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border rounded-md"
-            placeholder="Enter your email"
-          />
+    <div className="max-w-md mx-auto mt-8 p-6 text-center">
+      <div className="bg-gray-50 rounded-xl p-8 border-2 border-gray-200">
+        <div className="mb-6">
+          <svg 
+            className="mx-auto h-12 w-12 text-gray-400 mb-4" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" 
+            />
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636" 
+            />
+          </svg>
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">Login Unavailable</h1>
+          <p className="text-gray-600 mb-4">
+            User authentication has been disabled.
+          </p>
+          <p className="text-gray-500 text-sm">
+            Login functionality is no longer available as the e-commerce service has been discontinued.
+          </p>
         </div>
-        
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-            Password
-          </label>
-          <input
-            id="password"
-            type="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border rounded-md"
-            placeholder="Enter your password"
-          />
-        </div>
-        
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors disabled:bg-blue-300"
-        >
-          {isLoading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
-      
-      <p className="mt-4 text-sm text-center text-gray-600">
-        Don&apos;t have an account?{' '}
-        <Link href="/signup" className="text-blue-600 hover:underline">
-          Sign up
-        </Link>
-      </p>
+      </div>
     </div>
   );
 }
